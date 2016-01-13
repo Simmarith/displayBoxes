@@ -28,7 +28,7 @@ This is currently the only working type, more will get added soon.
   type:0,
   //The default html to be displayed in the displayBox
   content:'testbox1',
-  //Function called on refresh
+  //Function called on refresh; return will be shown in box
   update:function () {return 'testbox1<br>' + Date()},
   //NOT IMPLEMENTED YET
   updateFreq:10,
