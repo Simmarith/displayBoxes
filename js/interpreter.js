@@ -5,6 +5,13 @@ $(document).ready(function() {
     //TODO:dbInit and dbInterpret
   } else {
     config.noDBBoxes.map(function (boxConf, boxNr) {
+      //Set unset properties to default
+      ['updateFreq'].map(function (attribute) {
+        if (!(boxConf.hasOwnProperty(attribute))) {
+          boxConf[attribute] = config.defaults[attribute];
+        }
+      });
+      boxConf.counter = 0;
       $('.boxSpace').append('<div class="displayBox" boxNr="' + boxNr + '" data-row="' + boxConf.positioning.row + '" data-col="' + boxConf.positioning.col + '" data-sizex="' + boxConf.positioning.sizeX + '" data-sizey="' + boxConf.positioning.sizeY + '">' + boxConf.content + '</div>');
     })
   }
@@ -23,6 +30,21 @@ $(document).ready(function() {
 setInterval(function () {
   $('.displayBox').map(function () {
     var boxNr = $(this).attr('boxNr');
-    $(this).html(config.noDBBoxes[boxNr].update());
+    var boxConf = config.noDBBoxes[boxNr];
+    if (boxConf.hasOwnProperty('counter')) {
+      boxConf.counter = boxConf.counter + config.updateTick;
+      if (boxConf.counter >= boxConf.updateFreq) {
+        //Specialized handling for diffrent types
+        switch (config.boxTypes[boxConf.type]) {
+          case 'custom':
+            $(this).html(boxConf.update());
+            console.log('Box ' + boxNr + ' Has been updated!');
+            break;
+          default:
+            $(this).html('No proper Type defined!');
+        }
+        boxConf.counter = 0;
+      }
+    }
   });
 }, config.updateTick * 1000);

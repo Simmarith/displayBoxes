@@ -30,7 +30,7 @@ This is currently the only working type, more will get added soon.
   content:'testbox1',
   //Function called on refresh; return will be shown in box
   update:function () {return 'testbox1<br>' + Date()},
-  //NOT IMPLEMENTED YET
+  //how long to wait until next update in seconds
   updateFreq:10,
   positioning: {
     //width of box

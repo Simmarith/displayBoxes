@@ -1,7 +1,7 @@
 var config = {
   //The name of the stylesheet which modifies the boxes/background. Currently working: neon
   style:'neon',
-  //Number of seconds until boxes are updated TODO: individual update system
+  //Number of seconds until boxes are checked if update is needed
   updateTick:10,
   //The diffrent types of boxes you can use which will be initialized/maintained diffrently. Currently working: custom
   boxTypes: [
@@ -25,7 +25,7 @@ var config = {
       content:'testbox1',
       //Function called on refresh; return will be shown in box
       update:function () {return 'testbox1<br>' + Date()},
-      //NOT IMPLEMENTED YET
+      //how long to wait until next update in seconds
       updateFreq:10,
       positioning: {
         //width of box
@@ -64,7 +64,7 @@ var config = {
       type:0,
       content:'testbox4',
       update:function () {return 'testbox4<br>' + Date()},
-      updateFreq:10,
+      updateFreq:20,
       positioning: {
         sizeX:8,
         sizeY:4,
