@@ -1,0 +1,27 @@
+body {
+  background-color: #000;
+  color: #fff;
+  font-family: Helvetica;
+}
+
+.displayBox {
+  border: 5px solid #eee;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.nominal {
+  border-color: #0f0;
+}
+
+.warning {
+  border-color: #ff0;
+}
+
+.alert {
+  border-color: #f00;
+}
+
+.shadow {
+  border: none;
+}
