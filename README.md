@@ -22,7 +22,7 @@ The displayBoxes themselves are currently defined in config.noDBBoxes. Every box
 The custom box is the most simple implementation. You just have to modify the content, update and positioning properties and your good to go.
 This is currently the only working type, more will get added soon.
 
-'''
+```
 {
   //See the types in config.boxTypes
   type:0,
@@ -41,4 +41,4 @@ This is currently the only working type, more will get added soon.
     col:1
   }
 }
-'''
+```
