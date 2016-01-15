@@ -6,13 +6,13 @@ $(document).ready(function() {
   } else {
     config.noDBBoxes.map(function (boxConf, boxNr) {
       //Set unset properties to default
-      ['updateFreq'].map(function (attribute) {
+      ['updateFreq', 'state'].map(function (attribute) {
         if (!(boxConf.hasOwnProperty(attribute))) {
           boxConf[attribute] = config.defaults[attribute];
         }
       });
       boxConf.counter = 0;
-      $('.boxSpace').append('<div class="displayBox" boxNr="' + boxNr + '" data-row="' + boxConf.positioning.row + '" data-col="' + boxConf.positioning.col + '" data-sizex="' + boxConf.positioning.sizeX + '" data-sizey="' + boxConf.positioning.sizeY + '">' + boxConf.content + '</div>');
+      $('.boxSpace').append('<div class="displayBox ' + config.states[boxConf.state] + '" boxNr="' + boxNr + '" data-row="' + boxConf.positioning.row + '" data-col="' + boxConf.positioning.col + '" data-sizex="' + boxConf.positioning.sizeX + '" data-sizey="' + boxConf.positioning.sizeY + '">' + boxConf.content + '</div>');
     })
   }
   var gridster = $('.boxSpace').gridster({
@@ -29,7 +29,8 @@ $(document).ready(function() {
 //Maintanance
 setInterval(function () {
   $('.displayBox').map(function () {
-    var boxNr = $(this).attr('boxNr');
+    var boxhtml = this;
+    var boxNr = $(boxhtml).attr('boxNr');
     var boxConf = config.noDBBoxes[boxNr];
     if (boxConf.hasOwnProperty('counter')) {
       boxConf.counter = boxConf.counter + config.updateTick;
@@ -37,12 +38,20 @@ setInterval(function () {
         //Specialized handling for diffrent types
         switch (config.boxTypes[boxConf.type]) {
           case 'custom':
-            $(this).html(boxConf.update());
+            var updatedInfo = boxConf.update();
+            boxConf.content = updatedInfo[0];
+            boxConf.state = updatedInfo[1];
+            $(this).html(boxConf.content);
             console.log('Box ' + boxNr + ' Has been updated!');
             break;
           default:
             $(this).html('No proper Type defined!');
         }
+        //Update css class for state
+        config.states.map(function () {
+          $(boxhtml).removeClass(this);
+        });
+        $(boxhtml).addClass(config.states[boxConf.state]);
         boxConf.counter = 0;
       }
     }

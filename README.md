@@ -19,7 +19,7 @@ You basically just have to modify the /config.js in order to fully customize the
 The displayBoxes themselves are currently defined in config.noDBBoxes. Every box is a single element of config.noDBBoxes. You can add/remove boxes by adding/removing entries in that array. The structure of that entry is dependent on the Type of the box. Here are the different types:
 
 ###Custom
-The custom box is the most simple implementation. You just have to modify the content, update and positioning properties and your good to go.
+The custom box is the most simple implementation. You just have to modify the content, update, state and positioning properties and your good to go.
 This is currently the only working type, more will get added soon.
 
 ```
@@ -28,8 +28,10 @@ This is currently the only working type, more will get added soon.
   type:0,
   //The default html to be displayed in the displayBox
   content:'testbox1',
-  //Function called on refresh; return will be shown in box
-  update:function () {return 'testbox1<br>' + Date()},
+  //Function called on refresh; return will be an array of the html to put into the box(at 0) and the index of the state(at 1)
+  update:function () {return ['testbox1<br>' + Date(), 0]},
+  //The index of the state in config.states
+  state:0,
   //how long to wait until next update in seconds
   updateFreq:10,
   positioning: {
