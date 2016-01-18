@@ -42,14 +42,34 @@ setInterval(function () {
             boxConf.content = updatedInfo[0];
             boxConf.state = updatedInfo[1];
             $(this).html(boxConf.content);
-            console.log('Box ' + boxNr + ' Has been updated!');
+            console.log('Box ' + boxNr + '(custom) Has been updated!');
+            break;
+          case 'slides':
+            if (boxConf.hasOwnProperty('currentSlide')) {
+              boxConf.currentSlide = boxConf.currentSlide + 1;
+              if (boxConf.currentSlide >= boxConf.slides.length) {
+                boxConf.currentSlide = 0;
+              }
+            } else {
+              boxConf.currentSlide = 0;
+            }
+            if (boxConf.slides[boxConf.currentSlide].hasOwnProperty('updateFreq')) {
+              boxConf.updateFreq = boxConf.slides[boxConf.currentSlide].updateFreq;
+            } else {
+              boxConf.updateFreq = config.defaults.updateFreq;
+            }
+            var updatedInfo = boxConf.slides[boxConf.currentSlide].update();
+            boxConf.content = updatedInfo[0];
+            boxConf.state = updatedInfo[1];
+            $(this).html(boxConf.content);
+            console.log('Box ' + boxNr + '(slides) Has been updated(slideNr:' + boxConf.currentSlide + ')!');
             break;
           default:
             $(this).html('No proper Type defined!');
         }
         //Update css class for state
-        config.states.map(function () {
-          $(boxhtml).removeClass(this);
+        config.states.map(function (stateName) {
+          $(boxhtml).removeClass(stateName);
         });
         $(boxhtml).addClass(config.states[boxConf.state]);
         boxConf.counter = 0;

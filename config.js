@@ -6,6 +6,7 @@ var config = {
   //The diffrent types of boxes you can use which will be initialized/maintained diffrently. Currently working: custom
   boxTypes: [
     'custom',
+    'slides',
     'sql',
     'iframe'
   ],
@@ -39,7 +40,7 @@ var config = {
       positioning: {
         //width of box
         sizeX:8,
-        //Height of box
+        //height of box
         sizeY:4,
         row:1,
         col:1
@@ -72,13 +73,39 @@ var config = {
       }
     },
     {
-      type:0,
+      //See the types in config.boxTypes
+      type:1,
+      //The default html to be displayed in the displayBox
       content:'testbox4',
-      update:function () {return ['testbox4<br>' + Date(), 3]},
+      //The diffrent slides that will be cycled through with every update
+      slides: [
+        {
+          //Function called on refresh; return will be an array of the html to put into the box(at 0) and the index of the state(at 1)
+          update:function () {return ['testslide1<br>' + Date(), 0]},
+          //how many seconds this slide is active
+          updateFreq:10
+        },
+        {
+          update:function () {return ['testslide2<br>' + Date(), 1]},
+          updateFreq:10
+        },
+        {
+          update:function () {return ['testslide3<br>' + Date(), 2]},
+          updateFreq:20
+        },
+        {
+          update:function () {return ['testslide4<br>' + Date(), 3]},
+          updateFreq:10
+        },
+      ],
+      //The index of the state as in config.states
       state:3,
-      updateFreq:20,
+      //how long to wait until next update in seconds; gets overwritten by the currently active slide
+      updateFreq:10,
       positioning: {
+        //width of box
         sizeX:8,
+        //height of box
         sizeY:4,
         row:5,
         col:9
