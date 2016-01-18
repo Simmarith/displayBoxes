@@ -14,6 +14,7 @@ var config = {
     'nominal',
     'warning',
     'alert',
+    'normal',
     'shadow'
   ],
   //The defaults will be used for the boxes with no own property
