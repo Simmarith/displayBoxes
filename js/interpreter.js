@@ -82,3 +82,28 @@ function update(boxNr) {
   $(boxhtml).addClass(config.states[boxConf.state]);
   boxConf.counter = 0;
 }
+
+//Go to previous/next slide via arrow keys
+window.onkeydown = function (e) {
+  //forwards
+  if (e.keyCode == '39') {
+    config.noDBBoxes.map(function(boxConf, boxNr) {
+        if (config.boxTypes[boxConf.type] == 'slides') {
+          update(boxNr);
+        }
+    }); 
+  }
+  //back
+  if (e.keyCode == '37') {
+    config.noDBBoxes.map(function(boxConf, boxNr) {
+        if (config.boxTypes[boxConf.type] == 'slides') {
+          if ((!(boxConf.hasOwnProperty('currentSlide'))) || (boxConf.currentSlide == 0)) {
+            boxConf.currentSlide = boxConf.slides.length - 2;
+          } else {
+            boxConf.currentSlide = boxConf.currentSlide - 2;
+          }
+            update(boxNr);
+        }
+    }); 
+  }
+}

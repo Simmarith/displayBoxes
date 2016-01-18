@@ -20,7 +20,6 @@ The displayBoxes themselves are currently defined in config.noDBBoxes. Every box
 
 ###Custom
 The custom box is the most simple implementation. You just have to modify the content, update, state and positioning properties and your good to go.
-This is currently the only working type, more will get added soon.
 
 ```
 {
@@ -50,6 +49,7 @@ The slides box is (currently) a custom box that changes its update property with
 
 ```
 {
+
   //See the types in config.boxTypes
   type:1,
   //The default html to be displayed in the displayBox
