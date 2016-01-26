@@ -30,10 +30,7 @@ $(document).ready(function() {
     min_cols:16,
     min_rows:9,
     widget_base_dimensions:[($(window).width() / 16) - 35, ($(window).height() / 9) - 22],
-    widget_margins:[15,15],
-      resize: {
-        enabled: true
-      }
+    widget_margins:[15,15]
   });
 });
 //Maintanance
