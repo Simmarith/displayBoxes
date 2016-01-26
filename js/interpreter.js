@@ -1,19 +1,29 @@
 //Initialisation
+//Get all classes files
+['classes/CustomBox.class.js', 'classes/DisplayBox.class.js', 'classes/SlidesBox.class.js'].map(function(path) {
+    $('head').append('<script src="' + path + '" charset="utf-8"></script>');
+});
 $('head').append('<link rel="stylesheet" href="css/' + config.style + '.css" media="screen" title="no title" charset="utf-8">');
+//all boxes
+var boxes = [];
 $(document).ready(function() {
   if (config.dbConnection) {
     //TODO:dbInit and dbInterpret
   } else {
     config.noDBBoxes.map(function (boxConf, boxNr) {
-      //Set unset properties to default
-      ['updateFreq', 'state'].map(function (attribute) {
-        if (!(boxConf.hasOwnProperty(attribute))) {
-          boxConf[attribute] = config.defaults[attribute];
-        }
-      });
-      boxConf.counter = 0;
-      $('.boxSpace').append('<div class="displayBox ' + config.states[boxConf.state] + '" boxNr="' + boxNr + '" data-row="' + boxConf.positioning.row + '" data-col="' + boxConf.positioning.col + '" data-sizex="' + boxConf.positioning.sizeX + '" data-sizey="' + boxConf.positioning.sizeY + '">' + boxConf.content + '</div>');
-    })
+      switch (config.boxTypes[boxConf.type]) {
+        case 'custom':
+          boxes[boxNr] = new CustomBox(boxNr, boxConf, $('.boxSpace'));
+          break;
+        
+        case 'slides':
+          boxes[boxNr] = new SlidesBox(boxNr, boxConf, $('.boxSpace'));
+          break;
+        
+        default:
+          console.log('BoxType for box nr:' + boxNr + ' not found!');
+      }
+    });
   }
   var gridster = $('.boxSpace').gridster({
     widget_selector:'.displayBox',
@@ -28,81 +38,44 @@ $(document).ready(function() {
 });
 //Maintanance
 setInterval(function () {
-  $('.displayBox').map(function () {
-    var boxhtml = this;
-    var boxNr = $(boxhtml).attr('boxNr');
-    var boxConf = config.noDBBoxes[boxNr];
-    if (boxConf.hasOwnProperty('counter')) {
-      boxConf.counter = boxConf.counter + config.updateTick;
-      if (boxConf.counter >= boxConf.updateFreq) {
-        update(boxNr);
-      }
+  boxes.map(function (boxObj) {
+    if (boxObj.hasOwnProperty('counter')) {
+      boxObj.counter = boxObj.counter + config.updateTick;
+    } else {
+      boxObj.counter = config.updateTick;
+    }
+    if (boxObj.counter >= boxObj.updateFreq) {
+      update(boxObj.boxNr);
     }
   });
 }, config.updateTick * 1000);
 
 function update(boxNr) {
-  var boxConf = config.noDBBoxes[boxNr];
-  var boxhtml = $('.displayBox[boxNr="' + boxNr + '"]');
-  switch (config.boxTypes[boxConf.type]) {
-    case 'custom':
-      var updatedInfo = boxConf.update();
-      boxConf.content = updatedInfo[0];
-      boxConf.state = updatedInfo[1];
-      $(boxhtml).html(boxConf.content);
-      console.log('Box ' + boxNr + '(custom) Has been updated!');
-      break;
-    case 'slides':
-      if (boxConf.hasOwnProperty('currentSlide')) {
-        boxConf.currentSlide = boxConf.currentSlide + 1;
-        if (boxConf.currentSlide >= boxConf.slides.length) {
-          boxConf.currentSlide = 0;
-        }
-      } else {
-        boxConf.currentSlide = 0;
-      }
-      if (boxConf.slides[boxConf.currentSlide].hasOwnProperty('updateFreq')) {
-        boxConf.updateFreq = boxConf.slides[boxConf.currentSlide].updateFreq;
-      } else {
-        boxConf.updateFreq = config.defaults.updateFreq;
-      }
-      var updatedInfo = boxConf.slides[boxConf.currentSlide].update();
-      boxConf.content = updatedInfo[0];
-      boxConf.state = updatedInfo[1];
-      $(boxhtml).html(boxConf.content);
-      console.log('Box ' + boxNr + '(slides) Has been updated(slideNr:' + boxConf.currentSlide + ')!');
-      break;
-    default:
-      $(boxhtml).html('No proper Type defined!');
-  }
-  //Update css class for state
-  config.states.map(function (stateName) {
-    $(boxhtml).removeClass(stateName);
-  });
-  $(boxhtml).addClass(config.states[boxConf.state]);
-  boxConf.counter = 0;
+  var boxObj = boxes[boxNr];
+  boxObj.update();
+  boxObj.counter = 0;
 }
 
 //Go to previous/next slide via arrow keys
 window.onkeydown = function (e) {
   //forwards
   if (e.keyCode == '39') {
-    config.noDBBoxes.map(function(boxConf, boxNr) {
-        if (config.boxTypes[boxConf.type] == 'slides') {
-          update(boxNr);
+    boxes.map(function(boxObj) {
+        if (boxObj instanceof SlidesBox) {
+          update(boxObj.boxNr);
         }
     }); 
   }
-  //back
+  //backwards
   if (e.keyCode == '37') {
-    config.noDBBoxes.map(function(boxConf, boxNr) {
-        if (config.boxTypes[boxConf.type] == 'slides') {
-          if ((!(boxConf.hasOwnProperty('currentSlide'))) || (boxConf.currentSlide == 0)) {
-            boxConf.currentSlide = boxConf.slides.length - 2;
+    boxes.map(function(boxObj) {
+        if (boxObj instanceof SlidesBox) {
+          if (boxObj.currentSlide == 0) {
+            boxObj.currentSlide = boxObj.slides.length - 2;
           } else {
-            boxConf.currentSlide = boxConf.currentSlide - 2;
+            boxObj.currentSlide = boxObj.currentSlide - 2;
           }
-            update(boxNr);
+            update(boxObj.boxNr);
         }
     }); 
   }
