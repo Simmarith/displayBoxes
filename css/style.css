@@ -1,3 +1,9 @@
 .displayBox {
   position: absolute;
+  overflow: hidden;
+}
+
+.subbox {
+  position: absolute;
+  overflow: none;
 }

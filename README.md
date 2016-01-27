@@ -1,8 +1,5 @@
 # displayBoxes
 
-SOME IMPORTANT INFO:
-
-This is a very early version of this software! most of the features are not implemented jet.
 
 ##Implementation
 
@@ -89,3 +86,83 @@ The slides box is (currently) a custom box that changes its update property with
     }
 }
 ```
+
+###Subgrid
+A subgrid is just a box with another grid in it. It does not support the full featureset of the main grid(yet) though. The subgrid has **one** update function to govern the subboxes. This function gets passed the Object of the SubGridBox its in. You can change the States, positioning and content in the subboxes array(boxObj.subboxes, looks mostly like the one in the config but with an jQueryElement property). These properties will then get updated after your update function has been executed.
+
+```
+	{
+      //See the types in config.boxTypes
+      type:2,
+      update:function (boxObj) { /* Handling for the subboxes */ },
+      //State shadow as we don't want a border around the subboxes
+      state:4,
+      //how long to wait until next update in seconds
+      updateFreq:10,
+      //number of rows of the subgrid
+      rows:2,
+      //number of columns of the subgrid
+      cols:2,
+      //Array of subboxes generated on startup
+      subboxes: [
+        {
+          //Html to be displayed in the subbox
+          content:'Testsubbox1',
+          state:0,
+          positioning: {
+            sizeX:1,
+            sizeY:1,
+            row:1,
+            col:1
+          }
+        },
+        {
+          content:'Testsubbox2',
+          state:1,
+          positioning: {
+            sizeX:1,
+            sizeY:1,
+            row:1,
+            col:2
+          }
+        },
+        {
+          content:'Testsubbox3',
+          state:2,
+          positioning: {
+            sizeX:1,
+            sizeY:1,
+            row:2,
+            col:1
+          }
+        },
+        {
+          content:'Testsubbox4',
+          state:3,
+          positioning: {
+            sizeX:1,
+            sizeY:1,
+            row:2,
+            col:2
+          }
+        }
+      ],
+      positioning: {
+        sizeX:8,
+        sizeY:4,
+        row:5,
+        col:1
+      }
+    }
+```
+
+Additionally, the SubGridBox got some functions for managing the boxes inside it:
+
+- initBox( (int) subboxNr ) {}
+    - creates an actual Box from an object in the subboxes array into the subgrid.
+- addBox( (Obj) subboxConf ) {}
+    - adds a new entry in the subbox array with the data provided to the function and calls initBox() for that entry
+- moveBox( (int) subboxNr ) {}
+    - updates the position of the box with this number from subboxes[subboxNr].positioning
+- removeBox( (int) subboxNr ) {}
+    - removes the subbox with that number from the subboxes array and the grid

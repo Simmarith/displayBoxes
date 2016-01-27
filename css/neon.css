@@ -10,6 +10,12 @@ body {
   padding: 5px;
 }
 
+.subbox {
+  border: 5px solid #eee;
+  border-radius: 5px;
+  padding: 5px;
+}
+
 .nominal {
   border-color: #0f0;
 }

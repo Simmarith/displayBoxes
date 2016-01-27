@@ -1,8 +1,7 @@
-function SlidesBox(boxNr, boxConf, parentContainer) {
+function SlidesBox(boxNr, boxConf, parentGrid) {
     //Methods
     this.init = function () {
-        $(this.parentContainer).append('<div class="displayBox ' + this.state + '" boxNr="' + this.boxNr + '" data-row="' + this.positioning.row + '" data-col="' + this.positioning.col + '" data-sizex="' + this.positioning.sizeX + '" data-sizey="' + this.positioning.sizeY + '">' + this.config.content + '</div>');
-        this.jQueryElement = $('.displayBox[boxNr="' + this.boxNr + '"]');
+        this.jQueryElement = this.parentGrid.add_widget('<div class="displayBox ' + this.state + '" boxNr="' + this.boxNr + '">' + this.config.content + '</div>', this.positioning.sizeX, this.positioning.sizeY, this.positioning.col, this.positioning.row);
     }
     this.update = function () {
         var thisObj = this;
@@ -27,7 +26,7 @@ function SlidesBox(boxNr, boxConf, parentContainer) {
         console.log('Box ' + this.boxNr + '(slides) Has been updated(slideNr:' + this.currentSlide + ')!');
     }
     //Constructor
-    DisplayBox.call(this, boxNr, boxConf, parentContainer);
+    DisplayBox.call(this, boxNr, boxConf, parentGrid);
     this.currentSlide = 0;
     this.slides = this.config.slides;
     this.content = this.config.content;

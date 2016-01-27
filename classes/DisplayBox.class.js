@@ -1,4 +1,4 @@
-function DisplayBox(boxNr, boxConf, parentContainer) {
+function DisplayBox(boxNr, boxConf, parentGrid) {
     this.boxNr = boxNr;
     this.config = boxConf;
     if (this.config.hasOwnProperty('updateFreq')) {
@@ -8,14 +8,13 @@ function DisplayBox(boxNr, boxConf, parentContainer) {
     }
     this.state = config.states[this.config.state];
     this.positioning = this.config.positioning;
-    this.parentContainer = parentContainer;
+    this.parentGrid = parentGrid;
     this.jQueryElement;
     this.init();
 }
 
 DisplayBox.prototype.init = function () {
-    $(this.parentContainer).append('<div class="displayBox ' + this.state + '" boxNr="' + this.boxNr + '" data-row="' + this.positioning.row + '" data-col="' + this.positioning.col + '" data-sizex="' + this.positioning.sizeX + '" data-sizey="' + this.positioning.sizeY + '"></div>');
-    this.jQueryElement = $('.displayBox[boxNr="' + this.boxNr + '"]');
+    this.jQueryElement =  this.parentGrid.add_widget('<div class="displayBox ' + this.state + '" boxNr="' + this.boxNr + '"></div>', this.positioning.sizeX, this.positioning.sizeY, this.positioning.col, this.positioning.row);
 };
 
 DisplayBox.prototype.update = function () {

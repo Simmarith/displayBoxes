@@ -7,7 +7,7 @@ var config = {
   boxTypes: [
     'custom',
     'slides',
-    'sql',
+    'subgrid',
     'iframe'
   ],
   states: [
@@ -61,11 +61,61 @@ var config = {
       }
     },
     {
-      type:0,
-      content:'testbox3',
-      update:function () {return ['testbox3<br>' + Date(), 2]},
-      state:2,
+      //See the types in config.boxTypes
+      type:2,
+      update:function (boxObj) { /* Handling for the subboxes */ },
+      //State shadow as we don't want a border around the subboxes
+      state:4,
+      //how long to wait until next update in seconds
       updateFreq:10,
+      //number of rows of the subgrid
+      rows:2,
+      //number of columns of the subgrid
+      cols:2,
+      //Array of subboxes generated on startup
+      subboxes: [
+        {
+          //Html to be displayed in the subbox
+          content:'Testsubbox1',
+          state:0,
+          positioning: {
+            sizeX:1,
+            sizeY:1,
+            row:1,
+            col:1
+          }
+        },
+        {
+          content:'Testsubbox2',
+          state:1,
+          positioning: {
+            sizeX:1,
+            sizeY:1,
+            row:1,
+            col:2
+          }
+        },
+        {
+          content:'Testsubbox3',
+          state:2,
+          positioning: {
+            sizeX:1,
+            sizeY:1,
+            row:2,
+            col:1
+          }
+        },
+        {
+          content:'Testsubbox4',
+          state:3,
+          positioning: {
+            sizeX:1,
+            sizeY:1,
+            row:2,
+            col:2
+          }
+        }
+      ],
       positioning: {
         sizeX:8,
         sizeY:4,
