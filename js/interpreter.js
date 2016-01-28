@@ -1,13 +1,8 @@
 //Initialisation
-//Get all classes files
-['classes/CustomBox.class.js', 'classes/DisplayBox.class.js', 'classes/SlidesBox.class.js', 'classes/SubGridBox.class.js'].map(function(path) {
-    $('head').append('<script src="' + path + '" charset="utf-8"></script>');
-});
 $('head').append('<link rel="stylesheet" href="css/' + config.style + '.css" media="screen" title="no title" charset="utf-8">');
 //all boxes
 var boxes = [];
 $(document).ready(function() {
-  var widget_base_dimensions = [($(window).width() / 16) - 35, ($(window).height() / 9) - 22]
   $('.boxSpace').addClass('mainGrid');
   var gridster = $('.boxSpace').gridster({
     namespace:'.mainGrid',
